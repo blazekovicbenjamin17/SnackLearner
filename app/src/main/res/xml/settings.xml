@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Korisnik">
+        <Preference
+            android:key="user_info"
+            android:title="Korisničko ime"
+            android:summary="Učitavam..."
+            android:selectable="false" />
+
+        <!-- NOVO: opcija za uređivanje profila -->
+        <Preference
+            android:key="edit_profile"
+            android:title="Uredi profil"
+            android:summary="Promijenite podatke o svom profilu" />
+
+        <Preference
+            android:key="logout"
+            android:title="Odjava"
+            android:summary="Odjavite se iz aplikacije" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="O aplikaciji">
+        <Preference
+            android:key="app_info"
+            android:title="Verzija aplikacije"
+            android:summary="2.0"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

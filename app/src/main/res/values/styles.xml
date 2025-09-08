@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dodatni stilovi koji nadopunjuju glavni Theme.SnackLearner -->
+    <!-- Npr. stil za posebne gumbe, tekstove, itd. -->
+
+    <style name="AppButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Stil za naslovne tekstove -->
+    <style name="AppTitleText" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Stil za opisni tekst -->
+    <style name="AppDescriptionText" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+</resources>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#F5F5AC"
+    android:elevation="2dp"
+    android:layout_marginBottom="8dp">
+
+    <!-- Naslov recepta -->
+    <TextView
+        android:id="@+id/recipeTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Naslov"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnBackground"
+        android:paddingBottom="4dp" />
+
+    <!-- Opis recepta - max 3 linije, ellipsize end -->
+    <TextView
+        android:id="@+id/recipeDescriptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Opis recepta"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="14sp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:paddingBottom="4dp" />
+
+    <!-- Korisnik -->
+    <TextView
+        android:id="@+id/recipeUsernameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="by username"
+        android:textSize="12sp"
+        android:textColor="?attr/colorOnBackground"
+        android:paddingBottom="8dp" />
+
+    <!-- Likes i Dislikes -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/recipeLikesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="👍 0"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingEnd="24dp" />
+
+        <TextView
+            android:id="@+id/recipeDislikesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="👎 0"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnBackground"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+</LinearLayout>

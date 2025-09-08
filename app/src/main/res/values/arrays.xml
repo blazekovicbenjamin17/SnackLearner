@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ringtone_entries">
+        <item>Default ringtone</item>
+        <item>Alarm clock</item>
+        <item>Notification sound</item>
+        <item>Custom sound 1</item>
+        <item>Custom sound 2</item>
+    </string-array>
+        <string-array name="ringtone_values">
+            <item>ringtone1.mp3</item>
+            <item>ringtone2.mp3</item>
+            <item>ringtone3.mp3</item>
+        </string-array>
+</resources>
