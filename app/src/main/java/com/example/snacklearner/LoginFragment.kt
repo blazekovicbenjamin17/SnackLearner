@@ -1,4 +1,3 @@
-// LoginFragment.kt
 package com.example.snacklearner
 
 import android.content.Context
@@ -8,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
+import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputEditText
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -38,51 +37,42 @@ class LoginFragment : Fragment() {
         activity.getToolbar().visibility = View.GONE
         activity.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
-        val usernameEditText = view.findViewById<EditText>(R.id.usernameEditText)
-        val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
+        val usernameEditText = view.findViewById<TextInputEditText>(R.id.usernameEditText)
+        val passwordEditText = view.findViewById<TextInputEditText>(R.id.passwordEditText)
         val loginButton = view.findViewById<Button>(R.id.loginButton)
         val registerButton = view.findViewById<Button>(R.id.registerButton)
 
         loginButton.setOnClickListener {
-            val email = usernameEditText.text.toString().trim()
+            val username = usernameEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(requireContext(), "Upiši email i lozinku.", Toast.LENGTH_SHORT).show()
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(requireContext(), "Upiši korisničko ime i lozinku.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        hideKeyboard(view)
-                        val uid = auth.currentUser!!.uid
-                        firestore.collection("users").document(uid).get()
-                            .addOnSuccessListener { doc ->
-                                val role = doc.getString("role") ?: "user"
-                                val isAdmin = role == "admin"
-
-                                activity.getToolbar().visibility = View.VISIBLE
-                                activity.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
-                                if (isAdmin) {
-                                    Toast.makeText(requireContext(), "Prijavljen admin.", Toast.LENGTH_SHORT).show()
-                                    val bundle = Bundle()
-                                    bundle.putBoolean("isAdmin", true)
-                                    val adminFragment = AdminFragment()
-                                    adminFragment.arguments = bundle
-                                    parentFragmentManager.beginTransaction()
-                                        .replace(R.id.fragmentContainer, adminFragment)
-                                        .commit()
-                                } else {
-                                    Toast.makeText(requireContext(), "Prijavljen korisnik.", Toast.LENGTH_SHORT).show()
+            firestore.collection("users")
+                .whereEqualTo("username", username)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val email = documents.documents[0].getString("email") ?: ""
+                        auth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    hideKeyboard(view)
+                                    activity.getToolbar().visibility = View.VISIBLE
+                                    activity.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                                    Toast.makeText(requireContext(), "Prijava uspješna.", Toast.LENGTH_SHORT).show()
                                     parentFragmentManager.beginTransaction()
                                         .replace(R.id.fragmentContainer, SearchFragment())
                                         .commit()
+                                } else {
+                                    Toast.makeText(requireContext(), "Greška: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                                 }
                             }
                     } else {
-                        Toast.makeText(requireContext(), "Greška: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Korisničko ime ne postoji.", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
