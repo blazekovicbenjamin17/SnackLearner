@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Sekcija korisnika -->
+    <PreferenceCategory
+        android:title="Korisnik"
+        >
 
-    <PreferenceCategory android:title="Korisnik">
+        <!-- Prikaz korisničkog imena -->
         <Preference
             android:key="user_info"
             android:title="Korisničko ime"
             android:summary="Učitavam..."
-            android:selectable="false" />
+            android:selectable="false"
+            android:icon="@drawable/outline_person_24"/>
 
-        <!-- NOVO: opcija za uređivanje profila -->
+        <!-- Uredi profil -->
         <Preference
             android:key="edit_profile"
             android:title="Uredi profil"
-            android:summary="Promijenite podatke o svom profilu" />
+            android:summary="Promijenite podatke o svom profilu"
+            android:icon="@drawable/ic_edit" />
 
+        <!-- Odjava -->
         <Preference
             android:key="logout"
             android:title="Odjava"
-            android:summary="Odjavite se iz aplikacije" />
+            android:summary="Odjavite se iz aplikacije"
+            android:icon="@drawable/ic_logout" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="O aplikaciji">
+    <!-- Sekcija o aplikaciji -->
+    <PreferenceCategory
+        android:title="O aplikaciji">
+
         <Preference
             android:key="app_info"
             android:title="Verzija aplikacije"
             android:summary="2.0"
-            android:selectable="false" />
+            android:selectable="false"
+            android:icon="@drawable/ic_info" />
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

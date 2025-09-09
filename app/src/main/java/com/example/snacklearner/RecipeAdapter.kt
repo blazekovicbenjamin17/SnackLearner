@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.google.android.material.button.MaterialButton
 import androidx.recyclerview.widget.RecyclerView
 
 data class Recipe(
@@ -30,8 +31,8 @@ class RecipeAdapter(
         val titleTextView: TextView = view.findViewById(R.id.recipeTitleTextView)
         val descriptionTextView: TextView = view.findViewById(R.id.recipeDescriptionTextView)
         val usernameTextView: TextView = view.findViewById(R.id.recipeUsernameTextView)
-        val likesTextView: TextView = view.findViewById(R.id.recipeLikesTextView)
-        val dislikesTextView: TextView = view.findViewById(R.id.recipeDislikesTextView)
+        val likeButton: MaterialButton = view.findViewById(R.id.likeImageView)
+        val dislikeButton: MaterialButton = view.findViewById(R.id.dislikeImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
@@ -46,11 +47,11 @@ class RecipeAdapter(
         holder.titleTextView.text = recipe.title
         holder.descriptionTextView.text = recipe.description
         holder.usernameTextView.text = "by ${recipe.username}"
-        holder.likesTextView.text = "👍 ${recipe.likes}"
-        holder.dislikesTextView.text = "👎 ${recipe.dislikes}"
+        holder.likeButton.text = recipe.likes.toString()
+        holder.dislikeButton.text = recipe.dislikes.toString()
 
-        holder.likesTextView.setOnClickListener { onLikeClicked(recipe.id) }
-        holder.dislikesTextView.setOnClickListener { onDislikeClicked(recipe.id) }
+        holder.likeButton.setOnClickListener { onLikeClicked(recipe.id) }
+        holder.dislikeButton.setOnClickListener { onDislikeClicked(recipe.id) }
         holder.itemView.setOnClickListener { onRecipeClicked(recipe) }
     }
 

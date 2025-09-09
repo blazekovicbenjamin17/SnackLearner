@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="24dp"
-    android:background="@color/colorBackground"> <!-- svijetlo narančasta -->
+    android:background="@color/colorBackground">
 
     <ImageView
         android:id="@+id/logoImageView"
@@ -26,6 +26,7 @@
         android:textColor="@color/colorTextPrimary"
         android:layout_marginBottom="24dp" />
 
+    <!-- Korisničko ime -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,6 +49,7 @@
             android:textColorHint="@color/colorTextSecondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Lozinka -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,6 +60,7 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxStrokeColor="@color/colorPrimary"
+        app:endIconMode="password_toggle"
         android:layout_marginBottom="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -71,6 +74,7 @@
             android:textColorHint="@color/colorTextSecondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Prijava -->
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
@@ -80,6 +84,7 @@
         android:background="@drawable/rounded_button"
         android:layout_marginBottom="8dp"/>
 
+    <!-- Registracija -->
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"

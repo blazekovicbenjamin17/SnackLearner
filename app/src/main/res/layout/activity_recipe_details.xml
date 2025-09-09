@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#F5F5DC">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:orientation="vertical"
@@ -36,7 +36,6 @@
             android:textStyle="bold"
             android:textSize="22sp"
             android:textColor="?attr/colorOnBackground"
-            android:text="Naslov recepta"
             android:layout_marginBottom="8dp" />
 
         <TextView
@@ -45,7 +44,6 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="?attr/colorOnBackground"
-            android:text="Opis recepta"
             android:layout_marginBottom="12dp" />
 
         <TextView
@@ -54,9 +52,9 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="?attr/colorOnBackground"
-            android:text="Sastojci recepta"
             android:layout_marginBottom="24dp" />
 
+        <!-- Likes i Dislikes -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -64,25 +62,29 @@
             android:gravity="center"
             android:layout_marginBottom="24dp">
 
-            <TextView
-                android:id="@+id/likesTextView"
+            <Button
+                android:id="@+id/likeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="👍 0"
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnBackground"
-                android:paddingEnd="32dp" />
-
-            <TextView
-                android:id="@+id/dislikesTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👎 0"
-                android:textSize="16sp"
+                android:text="0"
+                android:drawableLeft="@drawable/ic_thumb_up"
+                android:drawablePadding="8dp"
+                android:padding="8dp"
                 android:textColor="?attr/colorOnBackground" />
+
+            <Button
+                android:id="@+id/dislikeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_marginStart="16dp"
+                android:drawableLeft="@drawable/ic_thumb_down"
+                android:drawablePadding="8dp"
+                android:padding="8dp"
+                android:textColor="?attr/colorOnBackground" />
+
         </LinearLayout>
 
-        <!-- BACK gumb -->
         <Button
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
@@ -92,7 +94,6 @@
             android:textColor="?attr/colorOnPrimary"
             android:layout_marginBottom="16dp" />
 
-        <!-- SPREMI U FAVORITE -->
         <Button
             android:id="@+id/saveFavoriteButton"
             android:layout_width="wrap_content"
@@ -104,7 +105,6 @@
             android:paddingVertical="12dp"
             android:layout_marginBottom="16dp" />
 
-        <!-- UKLONI IZ FAVORITA -->
         <Button
             android:id="@+id/removeFavoriteButton"
             android:layout_width="wrap_content"
@@ -116,7 +116,6 @@
             android:paddingVertical="12dp"
             android:layout_marginBottom="24dp" />
 
-        <!-- DELETE RECIPE (samo admin vidi) -->
         <Button
             android:id="@+id/deleteRecipeButton"
             android:layout_width="wrap_content"
@@ -130,5 +129,4 @@
             android:visibility="gone" />
 
     </LinearLayout>
-
 </ScrollView>

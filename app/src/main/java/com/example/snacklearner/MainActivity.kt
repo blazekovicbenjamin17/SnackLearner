@@ -2,7 +2,6 @@ package com.example.snacklearner
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -22,13 +21,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Firebase analytics
         Firebase.analytics
         Log.d("FirebaseTest", "Firebase se uspješno inicijalizirao!")
 
+        // Toolbar
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         toolbar.title = "Zdravi recepti"
 
+        // Drawer
         drawerLayout = findViewById(R.id.drawerLayout)
         navigationView = findViewById(R.id.navigationView)
         navigationView.setNavigationItemSelectedListener(this)
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        // Početni fragment
         if (savedInstanceState == null) {
             loadLoginFragment()
         }
@@ -104,22 +107,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    // NOVA METODA za prilagodbu menija ovisno o roli:
+    // Prilagodba menija ovisno o roli
     fun updateDrawerForRole(role: String) {
         val menu = navigationView.menu
 
-        // Ako je admin
         if (role == "admin") {
             menu.findItem(R.id.nav_home)?.isVisible = true
             menu.findItem(R.id.nav_settings)?.isVisible = true
             menu.findItem(R.id.nav_saved)?.isVisible = true
             menu.findItem(R.id.nav_add_recipe)?.isVisible = true
         } else {
-            // Ako je običan korisnik
             menu.findItem(R.id.nav_home)?.isVisible = true
             menu.findItem(R.id.nav_settings)?.isVisible = true
             menu.findItem(R.id.nav_saved)?.isVisible = true
-            // Sakrij dodavanje recepta ako nije admin
             menu.findItem(R.id.nav_add_recipe)?.isVisible = true
         }
     }

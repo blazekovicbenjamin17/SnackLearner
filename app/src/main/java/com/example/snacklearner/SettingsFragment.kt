@@ -1,9 +1,9 @@
 package com.example.snacklearner
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +21,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         firestore = FirebaseFirestore.getInstance()
 
         val userInfoPref = findPreference<Preference>("user_info")
+        val editProfilePref = findPreference<Preference>("edit_profile")
+        val logoutPref = findPreference<Preference>("logout")
 
+        // Dohvat korisničkog imena
         val userId = auth.currentUser?.uid
         if (userId != null) {
             firestore.collection("users").document(userId).get()
@@ -35,18 +38,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
             userInfoPref?.summary = "Nepoznati korisnik"
         }
 
-        // Dodaj listener za uređivanje profila
-        val editProfilePref = findPreference<Preference>("edit_profile")
+        // Listener za uređivanje profila
         editProfilePref?.setOnPreferenceClickListener {
-            // Prebaci na EditProfileFragment
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, EditProfileFragment()) // Napravi ovaj fragment
+                .replace(R.id.fragmentContainer, EditProfileFragment())
                 .addToBackStack(null)
                 .commit()
             true
         }
 
-        val logoutPref = findPreference<Preference>("logout")
+        // Listener za odjavu
         logoutPref?.setOnPreferenceClickListener {
             auth.signOut()
             Toast.makeText(requireContext(), "Odjavljeni ste.", Toast.LENGTH_SHORT).show()
@@ -58,7 +59,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.setBackgroundColor(Color.parseColor("#F5F5DC"))
         super.onViewCreated(view, savedInstanceState)
+
+        view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
     }
 }

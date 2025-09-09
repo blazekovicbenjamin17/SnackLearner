@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -14,8 +15,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var likesTextView: TextView
-    private lateinit var dislikesTextView: TextView
+    private lateinit var likeButton: MaterialButton
+    private lateinit var dislikeButton: MaterialButton
 
     private var currentLikes = 0
     private var currentDislikes = 0
@@ -35,6 +36,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
+        // Dohvat podataka iz intent-a
         recipeId = intent.getStringExtra("recipe_id") ?: ""
         val title = intent.getStringExtra("title") ?: ""
         val description = intent.getStringExtra("description") ?: ""
@@ -46,8 +48,9 @@ class RecipeDetailsActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.titleTextView).text = title
         findViewById<TextView>(R.id.descriptionTextView).text = description
         findViewById<TextView>(R.id.ingredientsTextView).text = ingredients
-        likesTextView = findViewById(R.id.likesTextView)
-        dislikesTextView = findViewById(R.id.dislikesTextView)
+
+        likeButton = findViewById(R.id.likeButton)
+        dislikeButton = findViewById(R.id.dislikeButton)
         deleteRecipeButton = findViewById(R.id.deleteRecipeButton)
         saveButton = findViewById(R.id.saveFavoriteButton)
         removeButton = findViewById(R.id.removeFavoriteButton)
@@ -55,9 +58,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
         updateLikesDislikesUI()
 
-        // Like i Dislike
-        likesTextView.setOnClickListener { updateLike(true) }
-        dislikesTextView.setOnClickListener { updateLike(false) }
+        likeButton.setOnClickListener { updateLike(true) }
+        dislikeButton.setOnClickListener { updateLike(false) }
 
         backButton.setOnClickListener { finish() }
 
@@ -65,7 +67,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
         setupFavoriteManagement()
     }
 
-    //Provjerava je li korisnik admin i pokazuje gumb za brisanje
     private fun checkUserRoleAndSetUI() {
         val userId = auth.currentUser?.uid ?: return
         firestore.collection("users").document(userId).get()
@@ -73,17 +74,16 @@ class RecipeDetailsActivity : AppCompatActivity() {
                 val role = doc.getString("role") ?: "user"
                 isAdminUser = role == "admin"
                 deleteRecipeButton.visibility = if (isAdminUser) View.VISIBLE else View.GONE
-                if (isAdminUser) setupDeleteButton() // Podesi listener samo ako je admin
+                if (isAdminUser) setupDeleteButton()
             }
     }
 
-    //Ako je admin, setup listener za brisanje recepta
     private fun setupDeleteButton() {
         deleteRecipeButton.setOnClickListener {
             firestore.collection("recipes").document(recipeId).delete()
                 .addOnSuccessListener {
                     Toast.makeText(this, "Recept je obrisan.", Toast.LENGTH_SHORT).show()
-                    finish() // Vrati se nakon brisanja
+                    finish()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Greška pri brisanju recepta.", Toast.LENGTH_SHORT).show()
@@ -91,7 +91,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
         }
     }
 
-    //Setup spremanja i uklanjanja iz favorita
     private fun setupFavoriteManagement() {
         val userId = auth.currentUser?.uid
         if (userId == null) {
@@ -99,7 +98,10 @@ class RecipeDetailsActivity : AppCompatActivity() {
             saveButton.isEnabled = false
             removeButton.isEnabled = false
         } else {
-            val savedRef = firestore.collection("favorites").document(userId).collection("savedRecipes").document(recipeId)
+            val savedRef = firestore.collection("favorites")
+                .document(userId)
+                .collection("savedRecipes")
+                .document(recipeId)
 
             savedRef.get().addOnSuccessListener { doc ->
                 val isSaved = doc.exists()
@@ -133,7 +135,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
         }
     }
 
-    //Ažurira broj lajkova/dislajkova
     private fun updateLike(isLike: Boolean) {
         val docRef = firestore.collection("recipes").document(recipeId)
         firestore.runTransaction { transaction ->
@@ -155,7 +156,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
     }
 
     private fun updateLikesDislikesUI() {
-        likesTextView.text = "👍 $currentLikes"
-        dislikesTextView.text = "👎 $currentDislikes"
+        likeButton.text = currentLikes.toString()
+        dislikeButton.text = currentDislikes.toString()
     }
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#F5F5DC">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:orientation="vertical"
@@ -28,99 +29,171 @@
             android:text="Uredi profil"
             android:textStyle="bold"
             android:textSize="24sp"
-            android:textColor="?attr/colorOnBackground"
+            android:textColor="@color/colorTextPrimary"
             android:layout_marginBottom="24dp" />
 
         <!-- Korisničko ime -->
-        <EditText
-            android:id="@+id/usernameEditText"
-            android:hint="Korisničko ime"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="12dp" />
+            android:hint="Korisničko ime"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Ime -->
-        <EditText
-            android:id="@+id/firstNameEditText"
-            android:hint="Ime"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="12dp" />
+            android:hint="Ime"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/firstNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Prezime -->
-        <EditText
-            android:id="@+id/lastNameEditText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="Prezime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="12dp" />
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_marginBottom="12dp">
 
-        <!-- E-mail -->
-        <EditText
-            android:id="@+id/emailEditText"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:enabled="false"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lastNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- E-mail (disable) -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="24dp" />
+            android:hint="Email"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/colorTextSecondary"
+                android:textColorHint="@color/colorTextSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Trenutna lozinka -->
-        <EditText
-            android:id="@+id/currentPasswordEditText"
-            android:hint="Trenutna lozinka (za promjenu lozinke)"
-            android:padding="12dp"
-            android:inputType="textPassword"
-            android:textColor="?attr/colorOnBackground"
-            android:textColorHint="?attr/colorOnBackground"
-            android:background="@android:drawable/edit_text"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:hint="Trenutna lozinka (za promjenu lozinke)"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/currentPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Nova lozinka -->
-        <EditText
-            android:id="@+id/newPasswordEditText"
-            android:hint="Nova lozinka"
-            android:padding="12dp"
-            android:inputType="textPassword"
-            android:textColor="?attr/colorOnBackground"
-            android:textColorHint="?attr/colorOnBackground"
-            android:background="@android:drawable/edit_text"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
+            android:hint="Nova lozinka"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/newPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Gumbovi -->
         <Button
             android:id="@+id/saveButton"
             android:text="Spremi"
-            android:backgroundTint="?attr/colorPrimary"
-            android:textColor="?attr/colorOnPrimary"
+            android:background="@drawable/rounded_button"
+            android:textColor="@color/white"
             android:paddingHorizontal="24dp"
             android:paddingVertical="12dp"
             android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/backButton"
             android:text="BACK"
-            android:backgroundTint="?attr/colorPrimary"
-            android:textColor="?attr/colorOnPrimary"
+            android:background="@drawable/rounded_button"
+            android:textColor="@color/white"
             android:paddingHorizontal="24dp"
             android:paddingVertical="12dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-
 </ScrollView>
