@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -47,12 +48,13 @@
             android:textColor="?attr/colorOnBackground"
             android:paddingBottom="12dp" />
 
-        <!-- Likes i Dislikes -->
+        <!-- Likes, Dislikes i Favorites -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="start">
+            android:gravity="start"
+            android:layout_marginBottom="4dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/likeImageView"
@@ -78,6 +80,7 @@
                 app:iconTint="?attr/colorOnBackground"
                 app:iconPadding="4dp"
                 android:padding="4dp" />
+
         </LinearLayout>
 
     </LinearLayout>

@@ -4,28 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.google.android.material.button.MaterialButton
 import androidx.recyclerview.widget.RecyclerView
-
-data class Recipe(
-    val id: String,
-    val title: String,
-    val description: String,
-    val username: String,
-    val ingredients: String,
-    val likes: Int,
-    val dislikes: Int
-)
+import com.google.android.material.button.MaterialButton
 
 class RecipeAdapter(
-    recipes: List<Recipe>,
+    private var recipes: List<Recipe>,
     private val onLikeClicked: (String) -> Unit,
     private val onDislikeClicked: (String) -> Unit,
     private val onRecipeClicked: (Recipe) -> Unit
 ) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
-
-    private var fullList: List<Recipe> = recipes
-    private var recipesFiltered: List<Recipe> = recipes
 
     class RecipeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.recipeTitleTextView)
@@ -33,6 +20,7 @@ class RecipeAdapter(
         val usernameTextView: TextView = view.findViewById(R.id.recipeUsernameTextView)
         val likeButton: MaterialButton = view.findViewById(R.id.likeImageView)
         val dislikeButton: MaterialButton = view.findViewById(R.id.dislikeImageView)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
@@ -42,38 +30,23 @@ class RecipeAdapter(
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
-        val recipe = recipesFiltered[position]
-
+        val recipe = recipes[position]
         holder.titleTextView.text = recipe.title
         holder.descriptionTextView.text = recipe.description
         holder.usernameTextView.text = "by ${recipe.username}"
         holder.likeButton.text = recipe.likes.toString()
         holder.dislikeButton.text = recipe.dislikes.toString()
 
+
         holder.likeButton.setOnClickListener { onLikeClicked(recipe.id) }
         holder.dislikeButton.setOnClickListener { onDislikeClicked(recipe.id) }
         holder.itemView.setOnClickListener { onRecipeClicked(recipe) }
     }
 
-    override fun getItemCount(): Int = recipesFiltered.size
+    override fun getItemCount(): Int = recipes.size
 
     fun updateData(newList: List<Recipe>) {
-        fullList = newList
-        recipesFiltered = newList
-        notifyDataSetChanged()
-    }
-
-    fun filterData(query: String) {
-        recipesFiltered = if (query.isEmpty()) {
-            fullList
-        } else {
-            fullList.filter {
-                it.title.contains(query, ignoreCase = true) ||
-                        it.description.contains(query, ignoreCase = true) ||
-                        it.username.contains(query, ignoreCase = true) ||
-                        it.ingredients.contains(query, ignoreCase = true)
-            }
-        }
+        recipes = newList
         notifyDataSetChanged()
     }
 }

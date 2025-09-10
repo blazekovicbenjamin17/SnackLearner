@@ -2,13 +2,14 @@ package com.example.snacklearner
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import android.widget.TextView
-import android.widget.Button
 
 class RecipeDetailsActivity : AppCompatActivity() {
 
@@ -24,6 +25,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
     private var currentLikes = 0
     private var currentDislikes = 0
     private var recipeId = ""
+    private var ingredientsList: List<String> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,18 +34,16 @@ class RecipeDetailsActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        // Dohvat podataka iz intent-a
         recipeId = intent.getStringExtra("recipe_id") ?: ""
         val title = intent.getStringExtra("title") ?: ""
         val description = intent.getStringExtra("description") ?: ""
-        val ingredients = intent.getStringExtra("ingredients") ?: ""
+        ingredientsList = intent.getStringArrayListExtra("ingredients")?.mapNotNull { it } ?: emptyList()
         currentLikes = intent.getIntExtra("likes", 0)
         currentDislikes = intent.getIntExtra("dislikes", 0)
 
-        // UI elementi
         findViewById<TextView>(R.id.titleTextView).text = title
         findViewById<TextView>(R.id.descriptionTextView).text = description
-        findViewById<TextView>(R.id.ingredientsTextView).text = ingredients
+        findViewById<TextView>(R.id.ingredientsTextView).text = ingredientsList.joinToString("\n")
 
         likeButton = findViewById(R.id.likeButton)
         dislikeButton = findViewById(R.id.dislikeButton)
@@ -55,7 +55,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
         likeButton.setOnClickListener { updateLike(true) }
         dislikeButton.setOnClickListener { updateLike(false) }
-
         backButton.setOnClickListener { finish() }
 
         setupFavoriteManagement()
@@ -110,19 +109,16 @@ class RecipeDetailsActivity : AppCompatActivity() {
         firestore.runTransaction { transaction ->
             val snapshot = transaction.get(docRef)
             if (isLike) {
-                val newLikes = (snapshot.getLong("likes") ?: 0) + 1
+                val newLikes = (snapshot.getLong("likes") ?: 0L) + 1
                 transaction.update(docRef, "likes", newLikes)
                 currentLikes += 1
             } else {
-                val newDislikes = (snapshot.getLong("dislikes") ?: 0) + 1
+                val newDislikes = (snapshot.getLong("dislikes") ?: 0L) + 1
                 transaction.update(docRef, "dislikes", newDislikes)
                 currentDislikes += 1
             }
-        }.addOnSuccessListener {
-            updateLikesDislikesUI()
-        }.addOnFailureListener {
-            Toast.makeText(this, "Greška pri ažuriranju.", Toast.LENGTH_SHORT).show()
-        }
+        }.addOnSuccessListener { updateLikesDislikesUI() }
+            .addOnFailureListener { Toast.makeText(this, "Greška pri ažuriranju.", Toast.LENGTH_SHORT).show() }
     }
 
     private fun updateLikesDislikesUI() {
