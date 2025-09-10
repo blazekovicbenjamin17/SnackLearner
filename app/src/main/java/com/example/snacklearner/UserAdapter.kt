@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
 
 class UserAdapter(
     private var users: List<Triple<String, String, String>>, // email, role, uid
@@ -46,7 +47,15 @@ class UserAdapter(
 
         if (isAdminMode) {
             holder.deleteButton.visibility = View.VISIBLE
-            holder.deleteButton.setOnClickListener { onDeleteClicked(uid) }
+            holder.deleteButton.setOnClickListener {
+                val context = holder.itemView.context
+                AlertDialog.Builder(context)
+                    .setTitle("Potvrda")
+                    .setMessage("Jeste li sigurni da želite obrisati ovog korisnika?")
+                    .setPositiveButton("Da") { _, _ -> onDeleteClicked(uid) }
+                    .setNegativeButton("Ne", null)
+                    .show()
+            }
         } else {
             holder.deleteButton.visibility = View.GONE
         }

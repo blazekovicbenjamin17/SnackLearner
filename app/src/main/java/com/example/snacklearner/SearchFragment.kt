@@ -7,12 +7,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SearchFragment : Fragment() {
@@ -21,6 +22,7 @@ class SearchFragment : Fragment() {
     private lateinit var recipeAdapter: RecipeAdapter
     private lateinit var firestore: FirebaseFirestore
     private lateinit var searchEditText: EditText
+    private lateinit var adminSettingsButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,19 +53,41 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 recipeAdapter.filterData(s.toString())
             }
-
-            override fun beforeTextChanged(
-                s: CharSequence?, start: Int, count: Int, after: Int
-            ) {}
-
-            override fun onTextChanged(
-                s: CharSequence?, start: Int, before: Int, count: Int
-            ) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        adminSettingsButton = view.findViewById(R.id.admin_settings)
+        adminSettingsButton.visibility = View.GONE
+        checkUserRole()
+
+        adminSettingsButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, AdminFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         loadRecipes()
     }
 
+    private fun checkUserRole() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.let { user ->
+            firestore.collection("users")
+                .document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val role = document.getString("role")
+                    if (role.equals("admin", ignoreCase = true)) {
+                        adminSettingsButton.visibility = View.VISIBLE
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Greška: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
 
     private fun loadRecipes() {
         firestore.collection("recipes")
@@ -83,11 +107,7 @@ class SearchFragment : Fragment() {
                 recipeAdapter.updateData(recipes)
             }
             .addOnFailureListener { e ->
-                Toast.makeText(
-                    requireContext(),
-                    "Greška: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Greška: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 

@@ -1,5 +1,6 @@
 package com.example.snacklearner
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,15 @@ class AdminRecipeAdapter(
         holder.titleTextView.text = recipe.title
         holder.descriptionTextView.text = recipe.description
         holder.usernameTextView.text = "by ${recipe.username}"
-        holder.deleteButton.setOnClickListener { onDeleteClicked(recipe.id) }
+
+        holder.deleteButton.setOnClickListener {
+            AlertDialog.Builder(holder.itemView.context)
+                .setTitle("Potvrda")
+                .setMessage("Jeste li sigurni da želite obrisati ovaj recept?")
+                .setPositiveButton("Da") { _, _ -> onDeleteClicked(recipe.id) }
+                .setNegativeButton("Ne", null)
+                .show()
+        }
     }
 
     override fun getItemCount() = filteredList.size

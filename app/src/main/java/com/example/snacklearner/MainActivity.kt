@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -22,12 +23,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Toolbar
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         toolbar.title = "Zdravi recepti"
 
-        // Drawer
         drawerLayout = findViewById(R.id.drawerLayout)
         navigationView = findViewById(R.id.navigationView)
         navigationView.setNavigationItemSelectedListener(this)
@@ -44,26 +43,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
 
-        // Početni fragment
         if (savedInstanceState == null) {
-            loadSearchFragment()
+            loadLoginFragment()
         }
 
-        // Provjeri ulogu korisnika i prilagodi meni
         checkUserRole()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    if (supportFragmentManager.backStackEntryCount > 0) {
+                        supportFragmentManager.popBackStack()
+                    } else {
+                        finish()
+                    }
+                }
+            }
+        })
     }
 
-    // Dodaj funkcije koje LoginFragment poziva
     fun getToolbar(): Toolbar = toolbar
     fun getDrawerLayout(): DrawerLayout = drawerLayout
-
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -99,7 +101,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun loadSearchFragment() {
+    private fun loadLoginFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, LoginFragment())
+            .commit()
+    }
+
+    fun loadSearchFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, SearchFragment())
             .commit()
@@ -137,7 +145,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val currentUser = FirebaseAuth.getInstance().currentUser
         val menu = navigationView.menu
         val adminItem = menu.findItem(R.id.admin_settings)
-        adminItem.isVisible = false
+        adminItem?.isVisible = false
 
         currentUser?.let { user ->
             FirebaseFirestore.getInstance().collection("users")
@@ -146,7 +154,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .addOnSuccessListener { document ->
                     val role = document.getString("role")
                     if (role.equals("admin", ignoreCase = true)) {
-                        runOnUiThread { adminItem.isVisible = true }
+                        runOnUiThread { adminItem?.isVisible = true }
                     }
                 }
                 .addOnFailureListener { e ->
