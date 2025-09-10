@@ -44,7 +44,7 @@ class SearchFragment : Fragment() {
         )
         recyclerView.adapter = recipeAdapter
 
-        searchEditText = view.findViewById(R.id.searchEditText)
+        searchEditText = view.findViewById(R.id.searchEditTextSearch)
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) = applyFilters()
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
