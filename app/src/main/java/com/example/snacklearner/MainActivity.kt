@@ -3,13 +3,14 @@ package com.example.snacklearner
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -20,10 +21,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Firebase analytics
-        Firebase.analytics
-        Log.d("FirebaseTest", "Firebase se uspješno inicijalizirao!")
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar)
@@ -45,15 +42,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        toolbar.setNavigationOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
+        toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
 
         // Početni fragment
         if (savedInstanceState == null) {
-            loadLoginFragment()
+            loadSearchFragment()
         }
+
+        // Provjeri ulogu korisnika i prilagodi meni
+        checkUserRole()
     }
+
+    // Dodaj funkcije koje LoginFragment poziva
+    fun getToolbar(): Toolbar = toolbar
+    fun getDrawerLayout(): DrawerLayout = drawerLayout
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -69,27 +71,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_saved -> loadSavedRecipesFragment()
             R.id.nav_add_recipe -> loadAddRecipeFragment()
             R.id.nav_settings -> loadSettingsFragment()
+            R.id.admin_settings -> checkAdminAndLoad()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun loadLoginFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, LoginFragment())
-            .commit()
+    private fun checkAdminAndLoad() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.uid)
+                .get()
+                .addOnSuccessListener { doc ->
+                    val role = doc.getString("role") ?: "user"
+                    if (role.equals("admin", true)) {
+                        loadAdminFragment()
+                    } else {
+                        Toast.makeText(this, "Nemate prava za pristup Admin panelu", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Greška prilikom provjere uloge", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(this, "Niste prijavljeni", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadSearchFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, SearchFragment())
-            .commit()
-    }
-
-    private fun loadSettingsFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, SettingsFragment())
-            .addToBackStack(null)
             .commit()
     }
 
@@ -107,23 +119,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    // Prilagodba menija ovisno o roli
-    fun updateDrawerForRole(role: String) {
-        val menu = navigationView.menu
-
-        if (role == "admin") {
-            menu.findItem(R.id.nav_home)?.isVisible = true
-            menu.findItem(R.id.nav_settings)?.isVisible = true
-            menu.findItem(R.id.nav_saved)?.isVisible = true
-            menu.findItem(R.id.nav_add_recipe)?.isVisible = true
-        } else {
-            menu.findItem(R.id.nav_home)?.isVisible = true
-            menu.findItem(R.id.nav_settings)?.isVisible = true
-            menu.findItem(R.id.nav_saved)?.isVisible = true
-            menu.findItem(R.id.nav_add_recipe)?.isVisible = true
-        }
+    private fun loadSettingsFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, SettingsFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
-    fun getDrawerLayout(): DrawerLayout = drawerLayout
-    fun getToolbar(): Toolbar = toolbar
+    private fun loadAdminFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, AdminFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun checkUserRole() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val menu = navigationView.menu
+        val adminItem = menu.findItem(R.id.admin_settings)
+        adminItem.isVisible = false
+
+        currentUser?.let { user ->
+            FirebaseFirestore.getInstance().collection("users")
+                .document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val role = document.getString("role")
+                    if (role.equals("admin", ignoreCase = true)) {
+                        runOnUiThread { adminItem.isVisible = true }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("MainActivity", "Greška pri dohvatu role: ${e.message}")
+                }
+        }
+    }
 }

@@ -1,4 +1,3 @@
-// UserAdapter.kt
 package com.example.snacklearner
 
 import android.view.LayoutInflater
@@ -13,15 +12,24 @@ class UserAdapter(
     private val onDeleteClicked: (String) -> Unit
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
+    private var usersFullList: List<Triple<String, String, String>> = users
     private var isAdminMode: Boolean = false
 
     fun updateData(newUsers: List<Triple<String, String, String>>) {
         users = newUsers
+        usersFullList = newUsers
         notifyDataSetChanged()
     }
 
     fun setAdminMode(isAdmin: Boolean) {
         isAdminMode = isAdmin
+        notifyDataSetChanged()
+    }
+
+    fun filterData(query: String) {
+        users = if (query.isEmpty()) usersFullList else usersFullList.filter { (email, role, _) ->
+            email.contains(query, ignoreCase = true) || role.contains(query, ignoreCase = true)
+        }
         notifyDataSetChanged()
     }
 

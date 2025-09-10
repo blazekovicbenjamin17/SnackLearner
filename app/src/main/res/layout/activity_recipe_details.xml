@@ -70,7 +70,8 @@
                 android:drawableLeft="@drawable/ic_thumb_up"
                 android:drawablePadding="8dp"
                 android:padding="8dp"
-                android:textColor="?attr/colorOnBackground" />
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_button"/>
 
             <Button
                 android:id="@+id/dislikeButton"
@@ -81,7 +82,8 @@
                 android:drawableLeft="@drawable/ic_thumb_down"
                 android:drawablePadding="8dp"
                 android:padding="8dp"
-                android:textColor="?attr/colorOnBackground" />
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_button"/>
 
         </LinearLayout>
 
@@ -90,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BACK"
-            android:backgroundTint="?attr/colorPrimary"
+            android:background="@drawable/rounded_button"
             android:textColor="?attr/colorOnPrimary"
             android:layout_marginBottom="16dp" />
 
@@ -99,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Spremi u favorite"
-            android:backgroundTint="?attr/colorPrimary"
+            android:background="@drawable/rounded_button"
             android:textColor="?attr/colorOnPrimary"
             android:paddingHorizontal="24dp"
             android:paddingVertical="12dp"
@@ -110,23 +112,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ukloni iz favorita"
-            android:backgroundTint="@color/design_default_color_error"
+            android:background="@drawable/rounded_button_secondary"
             android:textColor="@android:color/white"
             android:paddingHorizontal="24dp"
             android:paddingVertical="12dp"
             android:layout_marginBottom="24dp" />
-
-        <Button
-            android:id="@+id/deleteRecipeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Obriši recept"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:textColor="@android:color/white"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="12dp"
-            android:layout_marginBottom="24dp"
-            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

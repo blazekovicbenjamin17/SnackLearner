@@ -2,13 +2,13 @@ package com.example.snacklearner
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.TextView
+import android.widget.Button
 
 class RecipeDetailsActivity : AppCompatActivity() {
 
@@ -17,17 +17,13 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private lateinit var likeButton: MaterialButton
     private lateinit var dislikeButton: MaterialButton
-
-    private var currentLikes = 0
-    private var currentDislikes = 0
-    private var recipeId = ""
-
-    private lateinit var deleteRecipeButton: Button
     private lateinit var saveButton: Button
     private lateinit var removeButton: Button
     private lateinit var backButton: Button
 
-    private var isAdminUser = false
+    private var currentLikes = 0
+    private var currentDislikes = 0
+    private var recipeId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +47,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
         likeButton = findViewById(R.id.likeButton)
         dislikeButton = findViewById(R.id.dislikeButton)
-        deleteRecipeButton = findViewById(R.id.deleteRecipeButton)
         saveButton = findViewById(R.id.saveFavoriteButton)
         removeButton = findViewById(R.id.removeFavoriteButton)
         backButton = findViewById(R.id.backButton)
@@ -63,32 +58,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
         backButton.setOnClickListener { finish() }
 
-        checkUserRoleAndSetUI()
         setupFavoriteManagement()
-    }
-
-    private fun checkUserRoleAndSetUI() {
-        val userId = auth.currentUser?.uid ?: return
-        firestore.collection("users").document(userId).get()
-            .addOnSuccessListener { doc ->
-                val role = doc.getString("role") ?: "user"
-                isAdminUser = role == "admin"
-                deleteRecipeButton.visibility = if (isAdminUser) View.VISIBLE else View.GONE
-                if (isAdminUser) setupDeleteButton()
-            }
-    }
-
-    private fun setupDeleteButton() {
-        deleteRecipeButton.setOnClickListener {
-            firestore.collection("recipes").document(recipeId).delete()
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Recept je obrisan.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Greška pri brisanju recepta.", Toast.LENGTH_SHORT).show()
-                }
-        }
     }
 
     private fun setupFavoriteManagement() {

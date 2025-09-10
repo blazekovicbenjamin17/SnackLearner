@@ -150,8 +150,8 @@
 
         <!-- Povratak na login -->
         <Button
-            android:id="@+id/backToLoginButton"
-            android:text="Povratak na prijavu"
+            android:id="@+id/registerUserButton"
+            android:text="Registriraj se"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button"
@@ -160,12 +160,12 @@
 
         <!-- Registriraj -->
         <Button
-            android:id="@+id/registerUserButton"
-            android:text="Registriraj se"
+            android:id="@+id/backToLoginButton"
+            android:text="Povratak na prijavu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </ScrollView>
